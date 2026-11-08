@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,serif;color:white;background:linear-gradient(135deg,#210d38,#70245f,#35154f);overflow-x:hidden}
+header{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:25px;background:radial-gradient(circle,#9a4385,#30113f)}
+h1{font-size:clamp(40px,8vw,85px);color:#ffc0df;text-shadow:0 0 25px #ff72b7;margin:20px}
+.subtitle{font-size:20px;line-height:1.6}
+button{border:none;border-radius:30px;padding:14px 24px;margin:10px;cursor:pointer;font-size:15px;font-weight:bold;background:linear-gradient(90deg,#ff8fc8,#e9aaff);color:#48143f}
+section{width:90%;max-width:950px;margin:60px auto;padding:30px 20px;text-align:center;background:#ffffff15;border:1px solid #ffffff30;border-radius:25px}
+h2{font-size:35px;margin-bottom:20px;color:#ffc4e0}
+p{line-height:1.8}
+.countdown{display:flex;justify-content:center;flex-wrap:wrap;gap:15px;margin:25px}
+.time{background:#ffffff20;padding:20px;border-radius:15px;min-width:85px}
+.time strong{display:block;font-size:30px;color:#ffd1e7}
+.cake{font-size:115px;margin:20px;animation:bounce 2s infinite}
+@keyframes bounce{50%{transform:translateY(-12px)}}
+.gallery{display:block;width:100%;max-width:760px;margin:0 auto}
+.gallery img{width:100%;height:auto;max-height:520px;object-fit:contain;object-position:center;background:#1b0b2a;border-radius:18px;border:3px solid #ffb9dc;display:block;margin:0 auto}
+.letter{background:#ffe4f0;color:#64254f;padding:30px;border-radius:20px;text-align:left;line-height:2;font-size:18px}
+.balloon{position:fixed;bottom:-120px;width:45px;height:60px;border-radius:50%;animation:float 12s linear infinite;z-index:0;pointer-events:none}
+@keyframes float{to{transform:translateY(-120vh)}}
+footer{text-align:center;padding:40px;color:#ffc5df}
+.confetti{position:fixed;top:-10px;width:9px;height:14px;z-index:20;animation:fall 4s linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(700deg)}}
+.firework{position:fixed;width:6px;height:6px;border-radius:50%;z-index:30;animation:burst 1.3s forwards;pointer-events:none}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) scale(0);opacity:0}}
+</style>
+</head>
+<body>
+<header>
+<h1>Happy Birthday <span id="girlName">Beautiful</span> ❤️</h1>
+<p class="subtitle">Today is your special day!<br>May your life always shine with happiness.</p>
+<button onclick="startMusic()">🎵 Start Birthday Music</button>
+<button onclick="celebrate()">🎉 Celebrate</button>
+<audio id="song" src="music/song.mp3" loop></audio>
+</header>
+
+<section>
+<h2>⏳ Birthday Countdown</h2>
+<div class="countdown">
+<div class="time"><strong id="days">00</strong>Days</div>
+<div class="time"><strong id="hours">00</strong>Hours</div>
+<div class="time"><strong id="minutes">00</strong>Minutes</div>
+<div class="time"><strong id="seconds">00</strong>Seconds</div>
+</div>
+</section>
+
+<section>
+<h2>🎂 Make a Wish!</h2>
+<div class="cake" id="cake">🎂</div>
+<button onclick="blowCandle()">🌬️ Blow Candle</button>
+<p id="cakeMessage">Close your eyes and make a wish ❤️</p>
+</section>
+
+<section>
+<h2>📸 Beautiful Memories</h2>
+<div class="gallery" id="gallery">
+<img src="images/photo1.jpg" alt="Photo 1">
+<img src="images/photo2.jpg" alt="Photo 2">
+<img src="images/photo3.jpg" alt="Photo 3">
+<img src="images/photo4.jpg" alt="Photo 4">
+<img src="images/photo5.jpg" alt="Photo 5">
+<img src="images/photo6.jpg" alt="Photo 6">
+<img src="images/photo7.jpg" alt="Photo 7">
+<img src="images/photo8.jpg" alt="Photo 8">
+</div>
+</section>
+
+<section>
+<h2>💌 A Special Letter For You</h2>
+<div class="letter">
+<h3>Dear <span id="letterName">Beautiful</span>, ❤️</h3>
+<p id="letterText">On your special day, I want to remind you how special you are.
+
+May your smile always shine brighter than the stars.
+May every dream come true and every moment bring happiness.
+
+You deserve all the beautiful things in this world.
+
+Keep smiling, keep shining and always be happy.
+
+Happy Birthday, my special person! ❤️</p>
+<br>
+<h3>With Love,</h3>
+<h3 id="senderName">Your Name ❤️</h3>
+</div>
+</section>
+
+<section>
+<h2>🌸 Best Wishes</h2>
+<p>May your life be full of love, happiness and success.<br>
+May all your dreams come true.<br>
+May this year bring endless beautiful memories.</p>
+<br>
+<button onclick="fireworks()">🎆 Launch Fireworks</button>
+</section>
+
+<footer>Made With ❤️ Just For You<br>Happy Birthday!</footer>
+
+<script>
+// EDIT YOUR PERSONAL DETAILS HERE
+const CONFIG = {
+  girlName: "Beautiful",
+  senderName: "Your Name",
+  birthdayDate: "2026-11-09T00:00:00"
+};
+
+document.getElementById("girlName").textContent = CONFIG.girlName;
+document.getElementById("letterName").textContent = CONFIG.girlName;
+document.getElementById("senderName").textContent = CONFIG.senderName;
+
+// BIRTHDAY COUNTDOWN
+const birthday = new Date(CONFIG.birthdayDate);
+function updateCountdown(){
+  const now = new Date();
+  let target = new Date(birthday);
+  if(target < now) target.setFullYear(now.getFullYear()+1);
+  const difference = Math.max(0,target-now);
+  document.getElementById("days").textContent = Math.floor(difference/86400000);
+  document.getElementById("hours").textContent = Math.floor(difference/3600000)%24;
+  document.getElementById("minutes").textContent = Math.floor(difference/60000)%60;
+  document.getElementById("seconds").textContent = Math.floor(difference/1000)%60;
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+// MUSIC: click the button to start or pause
+function startMusic(){
+  const song=document.getElementById("song");
+  if(song.paused) song.play().catch(()=>alert("Add your MP3 file as music/song.mp3 and try again."));
+  else song.pause();
+}
+
+// CANDLE AND CONFETTI
+function blowCandle(){
+  document.getElementById("cake").textContent="🎂✨";
+  document.getElementById("cakeMessage").textContent="Your wish is on its way! ❤️";
+  confetti();
+}
+function confetti(){
+  const colors=["#ff75b7","#ffd166","#b99aff","#ffffff"];
+  for(let i=0;i<100;i++){
+    const p=document.createElement("div");
+    p.className="confetti";
+    p.style.left=Math.random()*100+"vw";
+    p.style.background=colors[i%colors.length];
+    p.style.animationDuration=(2+Math.random()*3)+"s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),5000);
+  }
+}
+
+// FIREWORKS
+function fireworks(){
+  const colors=["#ff75b7","#ffe2a8","#c7a5ff","#ffffff"];
+  for(let b=0;b<6;b++){
+    setTimeout(()=>{
+      const x=10+Math.random()*80, y=10+Math.random()*45;
+      for(let i=0;i<25;i++){
+        const p=document.createElement("div");
+        p.className="firework";
+        p.style.left=x+"vw"; p.style.top=y+"vh";
+        p.style.background=colors[b%colors.length];
+        const angle=i*Math.PI*2/25, distance=50+Math.random()*70;
+        p.style.setProperty("--x",Math.cos(angle)*distance+"px");
+        p.style.setProperty("--y",Math.sin(angle)*distance+"px");
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),1500);
+      }
+    },b*300);
+  }
+}
+
+// FLOATING BALLOONS
+const balloonColors=["#ff75b7","#b99aff","#ffd1e5","#e5a6ff"];
+for(let i=0;i<16;i++){
+  const b=document.createElement("div");
+  b.className="balloon";
+  b.style.left=Math.random()*100+"vw";
+  b.style.background=balloonColors[i%4];
+  b.style.animationDuration=(10+Math.random()*15)+"s";
+  b.style.animationDelay=(-Math.random()*15)+"s";
+  document.body.appendChild(b);
+}
+
+// AUTOMATIC PHOTO SLIDESHOW
+const photos=document.querySelectorAll(".gallery img");
+let photoIndex=0;
+photos.forEach((photo,i)=>photo.style.display=i===0?"block":"none");
+setInterval(()=>{
+  photos[photoIndex].style.display="none";
+  photoIndex=(photoIndex+1)%photos.length;
+  photos[photoIndex].style.display="block";
+},3500);
+
+function celebrate(){confetti();fireworks();}
+</script>
+</body>
+</html>
